@@ -188,3 +188,4 @@ src/.nuget/NuGet.exe
 # exclude
 !lib/Nancy.Swagger.dll
 !lib/Swagger.ObjectModel.dll
+!src/Sample2015.Task/quartz-server/*

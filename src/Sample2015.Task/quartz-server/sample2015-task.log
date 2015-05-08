@@ -1,0 +1,6 @@
+2015-05-07 18:25:00.2630 INFO FetchAccountUser Exec job Start: FetchAccountUser.
+2015-05-07 18:25:04.7690 INFO FetchAccountUser AccountUser(1): username=admin
+2015-05-07 18:25:04.7690 INFO FetchAccountUser Exec job End: FetchAccountUser.
+2015-05-07 18:37:00.2390 INFO FetchAccountUser Exec job Start: FetchAccountUser.
+2015-05-07 18:37:04.9400 INFO FetchAccountUser AccountUser(1): username=admin
+2015-05-07 18:37:04.9400 INFO FetchAccountUser Exec job End: FetchAccountUser.
