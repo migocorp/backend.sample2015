@@ -1,5 +1,7 @@
 ﻿namespace Sample2015.Web.Modules
 {
+    using System;
+    using System.Collections.Generic;
     using Nancy;
     using Nancy.ModelBinding;
     using Nancy.Responses.Negotiation;
@@ -7,6 +9,7 @@
     using Sample2015.Core.Model.EF;
     using Sample2015.Web.Helper;
     using Sample2015.Web.Helper.Extensions;
+    using Sample2015.Web.Helper.Extensions.ModelValidation;
     using Sample2015.Web.Models.Api;
     using Sample2015.Web.Models.Api.Account;
 
@@ -19,11 +22,15 @@
         {
             this.accountService = accountService;
 
-            this.Get["account-user", "/account/user/{id:int}"] = this.GetUserById;
+            this.Get["account-user", "/account/{id:int}"] = this.GetUserById;
 
-            this.Get["account-user-list", "/account/userlist"] = this.GetUserList;
+            this.Get["account-user-list", "/account/list"] = this.GetUserList;
 
-            this.Post["account-user-create", "/account"] = this.CreateAccountUser;
+            this.Post["account-user-create", "/account/create"] = this.CreateAccountUser;
+
+            ////this.Post["account-user-update", "/account/update"] = ;
+
+            ////this.Post["account-user-delete", "/account/delete"] = ;
         }
 
         private Negotiator GetUserById(dynamic parameters)
@@ -55,6 +62,18 @@
         private Negotiator CreateAccountUser(dynamic parameters)
         {
             ReqCreateAccountUser req = this.Bind<ReqCreateAccountUser>();
+
+            IList<string> messages = Sample2015.Web.Helper.ModelValidation.Validate<ReqCreateAccountUser>(this, req);
+
+            if (messages == null)
+            {
+                messages = ModelValidation.ValidatePassword(req.Password, req.PasswordCheck);
+            }
+
+            if (messages != null)
+            {
+                return Negotiate.WithStatusCode(HttpStatusCode.UnprocessableEntity).WithModel(ModelValidation.WrongValidationModel(req, messages, this)).WithView("Add.sshtml");
+            }
 
             var accountUser = new AccountUser()
             {

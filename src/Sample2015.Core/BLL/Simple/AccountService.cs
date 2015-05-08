@@ -36,6 +36,8 @@
             using (var scope = new DbContextScope(DbContextScopePurpose.Writing))
             {
                 this.repoAccountUser.Insert(accountUser);
+
+                scope.SaveChanges();
             }
         }
     }

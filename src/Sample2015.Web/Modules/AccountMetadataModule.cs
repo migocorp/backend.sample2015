@@ -4,6 +4,7 @@
     using Nancy.Swagger;
     using Sample2015.Web.Models.Api;
     using Sample2015.Web.Models.Api.Account;
+    using Swagger.ObjectModel.ApiDeclaration;
 
     public class AccountMetadataModule : MetadataModule<SwaggerRouteData>
     {
@@ -29,12 +30,13 @@
             this.Describe["account-user-create"] = description => description.AsSwagger(with =>
             {
                 with.ResourcePath("/api/account");
-                with.Summary("使用使用者");
-                with.Notes("使用使用者");
-                with.PathParam<int>("id", "User's Name", true, 0);
-                with.PathParam<int>("id", "User's Username", true, 0);
-                with.PathParam<int>("id", "User's Password", true, 0);
-                with.PathParam<int>("id", "User's Email", true, 0);
+                with.Summary("新增使用者");
+                with.Notes("新增使用者");
+                with.Param<string>(ParameterType.Form, "Name", "User's Name", true);
+                with.Param<string>(ParameterType.Form, "Username", "User's Username", true);
+                with.Param<string>(ParameterType.Form, "Password", "User's Password", true);
+                with.Param<string>(ParameterType.Form, "PasswordCheck", "User's Password Check", true);
+                with.Param<string>(ParameterType.Form, "Email", "User's Email", true);
                 with.Model<RspFrame>();
             });
         }
