@@ -58,8 +58,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BLL\BaseService.cs" />
     <Compile Include="BLL\IAccountService.cs" />
-    <Compile Include="BLL\Sample\AccountService.cs" />
+    <Compile Include="BLL\Simple\AccountService.cs" />
     <Compile Include="DAL\CoreDbContext.cs" />
     <Compile Include="DAL\DataInitializer.cs" />
     <Compile Include="DAL\DbContextScope\AmbientDbContextLocator.cs" />
