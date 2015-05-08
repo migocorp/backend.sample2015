@@ -50,5 +50,10 @@
 
         [Column("date_modified", Order = 310)]
         public DateTime? DateModified { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("AccountUser({0}): username={1}", this.ID, this.Username);
+        }
     }
 }
