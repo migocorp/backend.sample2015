@@ -1,4 +1,4 @@
-﻿namespace Sample2015.Core.BLL.Sample
+﻿namespace Sample2015.Core.BLL.Simple
 {
     using System;
     using System.Collections.Generic;
@@ -8,8 +8,9 @@
     using Sample2015.Core.DAL.DbContextScope;
     using Sample2015.Core.DAL.Repo.CategoryA;
     using Sample2015.Core.Model.EF;
+    using Sample2015.Core.DAL;
 
-    public class AccountService : IAccountService
+    public class AccountService : BaseService, IAccountService
     {
         private readonly IRepoAccountUser repoAccountUser;
 
@@ -23,6 +24,23 @@
             using (var scope = new DbContextScope(DbContextScopePurpose.Reading))
             {
                 return this.repoAccountUser.GetByID(id);
+            }
+        }
+
+        public IEnumerable<AccountUser> FindAll()
+        {
+            using (var scope = new DbContextScope(DbContextScopePurpose.Reading))
+            {
+                //return this.repoAccountUser.Get(null, null, "AccountCompany");
+                return this.repoAccountUser.Get();
+            }
+        }
+
+        public void Add(AccountUser accountUser)
+        {
+            using (var scope = new DbContextScope(DbContextScopePurpose.Writing))
+            {
+                this.repoAccountUser.Insert(accountUser);
             }
         }
     }

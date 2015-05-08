@@ -10,5 +10,9 @@
     public interface IAccountService
     {
         AccountUser GetUserById(int id);
+
+        IEnumerable<AccountUser> FindAll();
+
+        void Add(AccountUser accountUser);
     }
 }

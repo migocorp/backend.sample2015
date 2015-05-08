@@ -13,7 +13,10 @@
         protected override void Seed(CoreDbContext context)
         {
             var userSys = new AccountUser { Username = "admin", Password = "Admin1234", Email = "admin@migo.com", Name = "admin" };
+            var userSys2 = new AccountUser { Username = "Test", Password = "Test1234", Email = "test@migo.com", Name = "test" };
+
             context.AccountUsers.Add(userSys);
+            context.AccountUsers.Add(userSys2);
 
             context.SaveChanges();
         }

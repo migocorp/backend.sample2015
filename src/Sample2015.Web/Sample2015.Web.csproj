@@ -112,12 +112,18 @@
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Helper\BaseWebModule.cs" />
+    <Compile Include="Helper\Extensions\NancyModuleExtensions.cs" />
+    <Compile Include="Models\Api\Account\ReqCreateAccountUser.cs" />
+    <Compile Include="Models\Api\Account\ReqGetUserById.cs" />
+    <Compile Include="Models\Api\Account\RspAccountUserList.cs" />
+    <Compile Include="Models\Api\Account\RspAccountUser.cs" />
+    <Compile Include="Models\Api\RspFrame.cs" />
+    <Compile Include="Modules\AccountModule.cs" />
+    <Compile Include="Modules\AccountMetadataModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ModelDataProviders\" />
-    <Folder Include="Models\" />
-    <Folder Include="Modules\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sample2015.Core\Sample2015.Core.csproj">

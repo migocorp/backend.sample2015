@@ -9,5 +9,6 @@
 
     public interface IRepoAccountUser : IGenericRepository<AccountUser>
     {
+
     }
 }
