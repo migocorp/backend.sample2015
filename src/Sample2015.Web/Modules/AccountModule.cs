@@ -21,16 +21,16 @@
 
             this.Get["account-user", "/account/user/{id:int}"] = this.GetUserById;
 
-            this.Get["account-user-list", "account/userlist"] = this.GetUserList;
+            this.Get["account-user-list", "/account/userlist"] = this.GetUserList;
 
-            this.Post["account-user-create", "account"] = this.CreateAccountUser;
+            this.Post["account-user-create", "/account"] = this.CreateAccountUser;
         }
 
         private Negotiator GetUserById(dynamic parameters)
         {
             ReqGetUserById req = this.Bind<ReqGetUserById>();
 
-            var user = req.id > 0 ? this.accountService.GetUserById(req.id) : null;
+            var user = req.Id > 0 ? this.accountService.GetUserById(req.Id) : null;
 
             if (user == null)
             {
@@ -58,10 +58,10 @@
 
             var accountUser = new AccountUser()
             {
-                Email = req.email,
-                Name = req.name,
-                Password = req.password,
-                Username = req.username
+                Email = req.Email,
+                Name = req.Name,
+                Password = req.Password,
+                Username = req.Username
             };
 
             this.accountService.Add(accountUser);

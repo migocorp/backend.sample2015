@@ -1,14 +1,9 @@
 ﻿namespace Sample2015.Core.BLL.Simple
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Sample2015.Core.DAL.DbContextScope;
     using Sample2015.Core.DAL.Repo.CategoryA;
     using Sample2015.Core.Model.EF;
-    using Sample2015.Core.DAL;
 
     public class AccountService : BaseService, IAccountService
     {
@@ -31,7 +26,7 @@
         {
             using (var scope = new DbContextScope(DbContextScopePurpose.Reading))
             {
-                //return this.repoAccountUser.Get(null, null, "AccountCompany");
+                // return this.repoAccountUser.Get(null, null, "AccountCompany");
                 return this.repoAccountUser.Get();
             }
         }
