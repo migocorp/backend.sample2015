@@ -28,9 +28,9 @@
 
             this.Post["account-user-create", "/account/create"] = this.CreateAccountUser;
 
-            ////this.Post["account-user-update", "/account/update"] = ;
+            this.Post["account-user-update", "/account/update"] = this.UpdateAccountUser;
 
-            ////this.Post["account-user-delete", "/account/delete"] = ;
+            this.Post["account-user-delete", "/account/delete"] = this.DeleteAccountUser;
         }
 
         private Negotiator GetUserById(dynamic parameters)
@@ -84,6 +84,49 @@
             };
 
             this.accountService.Add(accountUser);
+
+            return Negotiate.WithOnlyJson(new RspFrame());
+        }
+
+        private Negotiator UpdateAccountUser(dynamic parameters)
+        {
+            ReqUpdateAccountUser req = this.Bind<ReqUpdateAccountUser>();
+
+            var user = this.accountService.GetUserById(req.Id);
+
+            if (user == null)
+            {
+                return Negotiate.WithOnlyJson(new RspFrame() { code = Convert.ToInt32(HttpStatusCode.NotFound) });
+            }
+
+            IList<string> messages = Sample2015.Web.Helper.ModelValidation.Validate<ReqUpdateAccountUser>(this, req);
+
+            if (messages != null)
+            {
+                return Negotiate.WithStatusCode(HttpStatusCode.UnprocessableEntity).WithModel(ModelValidation.WrongValidationModel(req, messages, this)).WithView("Add.sshtml");
+            }
+
+            user.Email = req.Email;
+            user.Name = req.Name;
+            user.Username = req.Username;
+
+            this.accountService.Update(user);
+
+            return Negotiate.WithOnlyJson(new RspFrame());
+        }
+
+        private Negotiator DeleteAccountUser(dynamic parameters)
+        {
+            ReqDeleteAccountUser req = this.Bind<ReqDeleteAccountUser>();
+
+            var user = this.accountService.GetUserById(req.Id);
+
+            if (user == null)
+            {
+                return Negotiate.WithOnlyJson(new RspFrame() { code = Convert.ToInt32(HttpStatusCode.NotFound) });
+            }
+
+            this.accountService.Delete(req.Id);
 
             return Negotiate.WithOnlyJson(new RspFrame());
         }

@@ -39,6 +39,27 @@
                 with.Param<string>(ParameterType.Form, "Email", "User's Email", true);
                 with.Model<RspFrame>();
             });
+
+            this.Describe["account-user-update"] = description => description.AsSwagger(with =>
+            {
+                with.ResourcePath("/api/account");
+                with.Summary("修改使用者");
+                with.Notes("修改使用者");
+                with.Param<int>(ParameterType.Form, "Id", "User's Id", true);
+                with.Param<string>(ParameterType.Form, "Name", "User's Name", true);
+                with.Param<string>(ParameterType.Form, "Username", "User's Username", true);
+                with.Param<string>(ParameterType.Form, "Email", "User's Email", true);
+                with.Model<RspFrame>();
+            });
+
+            this.Describe["account-user-delete"] = description => description.AsSwagger(with =>
+            {
+                with.ResourcePath("/api/account");
+                with.Summary("刪除使用者");
+                with.Notes("刪除使用者");
+                with.Param<int>(ParameterType.Form, "Id", "User's Id", true);
+                with.Model<RspFrame>();
+            });
         }
     }
 }

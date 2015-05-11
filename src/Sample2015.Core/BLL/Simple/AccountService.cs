@@ -40,5 +40,25 @@
                 scope.SaveChanges();
             }
         }
+
+        public void Update(AccountUser accountUser)
+        {
+            using (var scope = new DbContextScope(DbContextScopePurpose.Writing))
+            {
+                this.repoAccountUser.Update(accountUser);
+
+                scope.SaveChanges();
+            }
+        }
+
+        public void Delete(int id)
+        {
+            using (var scope = new DbContextScope(DbContextScopePurpose.Writing))
+            {
+                this.repoAccountUser.DeleteByID(id);
+
+                scope.SaveChanges();
+            }
+        }
     }
 }

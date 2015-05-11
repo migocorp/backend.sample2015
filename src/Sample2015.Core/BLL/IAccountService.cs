@@ -14,5 +14,9 @@
         IEnumerable<AccountUser> FindAll();
 
         void Add(AccountUser accountUser);
+
+        void Update(AccountUser accountUser);
+
+        void Delete(int id);
     }
 }

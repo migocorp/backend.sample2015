@@ -117,6 +117,8 @@
     <Compile Include="Helper\Extensions\NancyModuleExtensions.cs" />
     <Compile Include="Helper\HttpException.cs" />
     <Compile Include="Helper\ModelValidation.cs" />
+    <Compile Include="Models\Api\Account\ReqDeleteAccountUser.cs" />
+    <Compile Include="Models\Api\Account\ReqUpdateAccountUser.cs" />
     <Compile Include="Models\Api\Account\ReqCreateAccountUser.cs" />
     <Compile Include="Models\Api\Account\ReqGetUserById.cs" />
     <Compile Include="Models\Api\Account\RspAccountUserList.cs" />
