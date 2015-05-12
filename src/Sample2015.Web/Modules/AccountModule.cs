@@ -15,29 +15,33 @@
 
     public class AccountModule : BaseWebModule
     {
-        private IAccountService accountService;
+        public static readonly string PathApiAccountUser = "/account/{id:int}";
+        public static readonly string PathApiAccountUserList = "/account/list";
+        public static readonly string PathApiAccountUserCreate = "/account/create";
 
         public AccountModule(IAccountService accountService)
             : base()
         {
-            this.accountService = accountService;
+            this.AccountService = accountService;
 
-            this.Get["account-user", "/account/{id:int}"] = this.GetUserById;
+            this.Get["account-user", PathApiAccountUser] = this.GetUserById;
 
-            this.Get["account-user-list", "/account/list"] = this.GetUserList;
+            this.Get["account-user-list", PathApiAccountUserList] = this.GetUserList;
 
-            this.Post["account-user-create", "/account/create"] = this.CreateAccountUser;
+            this.Post["account-user-create", PathApiAccountUserCreate] = this.CreateAccountUser;
 
-            this.Post["account-user-update", "/account/update"] = this.UpdateAccountUser;
+            this.Put["account-user-update", PathApiAccountUser] = this.UpdateAccountUser;
 
-            this.Post["account-user-delete", "/account/delete"] = this.DeleteAccountUser;
+            this.Delete["account-user-delete", PathApiAccountUser] = this.DeleteAccountUser;
         }
+
+        public IAccountService AccountService { get; set; }
 
         private Negotiator GetUserById(dynamic parameters)
         {
             ReqGetUserById req = this.Bind<ReqGetUserById>();
 
-            var user = req.Id > 0 ? this.accountService.GetUserById(req.Id) : null;
+            var user = req.Id > 0 ? this.AccountService.GetUserById(req.Id) : null;
 
             if (user == null)
             {
@@ -53,7 +57,7 @@
         {
             ReqGetUserById req = this.Bind<ReqGetUserById>();
 
-            var users = this.accountService.FindAll();
+            var users = this.AccountService.FindAll();
 
             return Negotiate.WithOnlyJson(
                 new RspAccountUserList(HttpStatusCode.OK, users), HttpStatusCode.OK);
@@ -62,6 +66,13 @@
         private Negotiator CreateAccountUser(dynamic parameters)
         {
             ReqCreateAccountUser req = this.Bind<ReqCreateAccountUser>();
+
+            var user = this.AccountService.GetUserByUsername(req.Username);
+
+            if (user != null)
+            {
+                return Negotiate.WithOnlyJson(new RspFrame(HttpStatusCode.InternalServerError));
+            }
 
             IList<string> messages = Sample2015.Web.Helper.ModelValidation.Validate<ReqCreateAccountUser>(this, req);
 
@@ -72,7 +83,7 @@
 
             if (messages != null)
             {
-                return Negotiate.WithStatusCode(HttpStatusCode.UnprocessableEntity).WithModel(ModelValidation.WrongValidationModel(req, messages, this)).WithView("Add.sshtml");
+                return Negotiate.WithStatusCode(HttpStatusCode.UnprocessableEntity).WithModel(ModelValidation.WrongValidationModel(req, messages, this));
             }
 
             var accountUser = new AccountUser()
@@ -83,16 +94,16 @@
                 Username = req.Username
             };
 
-            this.accountService.Add(accountUser);
+            this.AccountService.Add(accountUser);
 
-            return Negotiate.WithOnlyJson(new RspFrame());
+            return Negotiate.WithOnlyJson(new RspFrame(HttpStatusCode.OK));
         }
 
         private Negotiator UpdateAccountUser(dynamic parameters)
         {
             ReqUpdateAccountUser req = this.Bind<ReqUpdateAccountUser>();
 
-            var user = this.accountService.GetUserById(req.Id);
+            var user = this.AccountService.GetUserById(req.Id);
 
             if (user == null)
             {
@@ -103,32 +114,32 @@
 
             if (messages != null)
             {
-                return Negotiate.WithStatusCode(HttpStatusCode.UnprocessableEntity).WithModel(ModelValidation.WrongValidationModel(req, messages, this)).WithView("Add.sshtml");
+                return Negotiate.WithStatusCode(HttpStatusCode.UnprocessableEntity).WithModel(ModelValidation.WrongValidationModel(req, messages, this));
             }
 
-            user.Email = req.Email;
-            user.Name = req.Name;
-            user.Username = req.Username;
+            user.Email = string.IsNullOrEmpty(req.Email) ? user.Email : req.Email;
+            user.Name = string.IsNullOrEmpty(req.Name) ? user.Email : req.Name;
+            user.DateModified = DateTime.Now;
 
-            this.accountService.Update(user);
+            this.AccountService.Update(user);
 
-            return Negotiate.WithOnlyJson(new RspFrame());
+            return Negotiate.WithOnlyJson(new RspFrame(HttpStatusCode.OK));
         }
 
         private Negotiator DeleteAccountUser(dynamic parameters)
         {
             ReqDeleteAccountUser req = this.Bind<ReqDeleteAccountUser>();
 
-            var user = this.accountService.GetUserById(req.Id);
+            var user = this.AccountService.GetUserById(req.Id);
 
             if (user == null)
             {
                 return Negotiate.WithOnlyJson(new RspFrame() { code = Convert.ToInt32(HttpStatusCode.NotFound) });
             }
 
-            this.accountService.Delete(req.Id);
+            this.AccountService.Delete(req.Id);
 
-            return Negotiate.WithOnlyJson(new RspFrame());
+            return Negotiate.WithOnlyJson(new RspFrame(HttpStatusCode.OK));
         }
     }
 }
