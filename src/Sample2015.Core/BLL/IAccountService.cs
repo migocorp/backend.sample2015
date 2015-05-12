@@ -18,5 +18,7 @@
         void Update(AccountUser accountUser);
 
         void Delete(int id);
+
+        AccountUser GetUserByUsername(string username);
     }
 }

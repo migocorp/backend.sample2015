@@ -1,6 +1,7 @@
 ﻿namespace Sample2015.Core.BLL.Simple
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Sample2015.Core.DAL.DbContextScope;
     using Sample2015.Core.DAL.Repo.CategoryA;
     using Sample2015.Core.Model.EF;
@@ -26,8 +27,7 @@
         {
             using (var scope = new DbContextScope(DbContextScopePurpose.Reading))
             {
-                // return this.repoAccountUser.Get(null, null, "AccountCompany");
-                return this.repoAccountUser.Get();
+                return this.repoAccountUser.Find();
             }
         }
 
@@ -58,6 +58,14 @@
                 this.repoAccountUser.DeleteByID(id);
 
                 scope.SaveChanges();
+            }
+        }
+
+        public AccountUser GetUserByUsername(string username)
+        {
+            using (var scope = new DbContextScope(DbContextScopePurpose.Reading))
+            {
+                return this.repoAccountUser.Find(u => u.Username.Equals(username)).SingleOrDefault();
             }
         }
     }
