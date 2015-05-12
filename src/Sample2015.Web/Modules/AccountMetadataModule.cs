@@ -32,11 +32,11 @@
                 with.ResourcePath("/api/account");
                 with.Summary("新增使用者");
                 with.Notes("新增使用者");
-                with.Param<string>(ParameterType.Form, "Name", "User's Name", true);
                 with.Param<string>(ParameterType.Form, "Username", "User's Username", true);
                 with.Param<string>(ParameterType.Form, "Password", "User's Password", true);
                 with.Param<string>(ParameterType.Form, "PasswordCheck", "User's Password Check", true);
                 with.Param<string>(ParameterType.Form, "Email", "User's Email", true);
+                with.Param<string>(ParameterType.Form, "Name", "User's Name", true);
                 with.Model<RspFrame>();
             });
 
@@ -45,10 +45,9 @@
                 with.ResourcePath("/api/account");
                 with.Summary("修改使用者");
                 with.Notes("修改使用者");
-                with.Param<int>(ParameterType.Form, "Id", "User's Id", true);
-                with.Param<string>(ParameterType.Form, "Name", "User's Name", true);
-                with.Param<string>(ParameterType.Form, "Username", "User's Username", true);
-                with.Param<string>(ParameterType.Form, "Email", "User's Email", true);
+                with.Param<int>(ParameterType.Path, "Id", "User's Id", true);
+                with.Param<string>(ParameterType.Form, "Email", "User's Email");
+                with.Param<string>(ParameterType.Form, "Name", "User's Name");
                 with.Model<RspFrame>();
             });
 
@@ -57,7 +56,7 @@
                 with.ResourcePath("/api/account");
                 with.Summary("刪除使用者");
                 with.Notes("刪除使用者");
-                with.Param<int>(ParameterType.Form, "Id", "User's Id", true);
+                with.Param<int>(ParameterType.Path, "Id", "User's Id", true);
                 with.Model<RspFrame>();
             });
         }

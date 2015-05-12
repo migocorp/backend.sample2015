@@ -1,4 +1,5 @@
 ﻿[module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed")]
+[module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Reviewed.")]
 
 namespace Sample2015.Web.Models.Api.Account
 {
@@ -18,34 +19,53 @@ namespace Sample2015.Web.Models.Api.Account
         public RspAccountUserList(HttpStatusCode codeHttp, IEnumerable<AccountUser> users)
             : base(codeHttp)
         {
-            this.Result = users == null ? new List<AccountUser>() : users.ToList();
+            this.result = new RspAccountUserResult();
+            if (users == null)
+            {
+                return;
+            }
+
+            this.result.count = users.Count();
+            users.ToList().ForEach(u => this.result.data.Add(new RspAccountUserResultData(u)));
         }
 
-        public List<AccountUser> Result { get; set; }
+        public RspAccountUserResult result { get; set; }
     }
 
     public class RspAccountUserResult
     {
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string User_name { get; set; }
+        public RspAccountUserResult()
+        {
+            this.count = 0;
+            this.data = new List<RspAccountUserResultData>();
+        }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string User_username { get; set; }
+        public int count { get; set; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string User_email { get; set; }
-
-        //// [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        //// public IList<RspAccountUserCompany> company { get; set; }
-
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string User_language { get; set; }
+        public IList<RspAccountUserResultData> data { get; set; }
     }
 
-    public class RspAccountUserCompany
+    public class RspAccountUserResultData
     {
-        public string Company_name { get; set; }
+        public RspAccountUserResultData(AccountUser user)
+        {
+            if (user == null)
+            {
+                return;
+            }
 
-        public int Company_id { get; set; }
+            this.user_username = user.Username;
+            this.user_email = user.Email;
+            this.user_name = user.Name;
+        }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string user_username { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string user_email { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string user_name { get; set; }
     }
 }
