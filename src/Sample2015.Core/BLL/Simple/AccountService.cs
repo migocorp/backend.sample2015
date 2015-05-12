@@ -1,14 +1,9 @@
 ﻿namespace Sample2015.Core.BLL.Simple
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Sample2015.Core.DAL.DbContextScope;
     using Sample2015.Core.DAL.Repo.CategoryA;
     using Sample2015.Core.Model.EF;
-    using Sample2015.Core.DAL;
 
     public class AccountService : BaseService, IAccountService
     {
@@ -31,7 +26,7 @@
         {
             using (var scope = new DbContextScope(DbContextScopePurpose.Reading))
             {
-                //return this.repoAccountUser.Get(null, null, "AccountCompany");
+                // return this.repoAccountUser.Get(null, null, "AccountCompany");
                 return this.repoAccountUser.Get();
             }
         }
@@ -41,6 +36,28 @@
             using (var scope = new DbContextScope(DbContextScopePurpose.Writing))
             {
                 this.repoAccountUser.Insert(accountUser);
+
+                scope.SaveChanges();
+            }
+        }
+
+        public void Update(AccountUser accountUser)
+        {
+            using (var scope = new DbContextScope(DbContextScopePurpose.Writing))
+            {
+                this.repoAccountUser.Update(accountUser);
+
+                scope.SaveChanges();
+            }
+        }
+
+        public void Delete(int id)
+        {
+            using (var scope = new DbContextScope(DbContextScopePurpose.Writing))
+            {
+                this.repoAccountUser.DeleteByID(id);
+
+                scope.SaveChanges();
             }
         }
     }

@@ -112,7 +112,13 @@
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Helper\BaseWebModule.cs" />
+    <Compile Include="Helper\Extensions\ModelValidation\NancyModuleValidationExtension.cs" />
+    <Compile Include="Helper\Extensions\ModelValidation\ValidationFailedResponse.cs" />
     <Compile Include="Helper\Extensions\NancyModuleExtensions.cs" />
+    <Compile Include="Helper\HttpException.cs" />
+    <Compile Include="Helper\ModelValidation.cs" />
+    <Compile Include="Models\Api\Account\ReqDeleteAccountUser.cs" />
+    <Compile Include="Models\Api\Account\ReqUpdateAccountUser.cs" />
     <Compile Include="Models\Api\Account\ReqCreateAccountUser.cs" />
     <Compile Include="Models\Api\Account\ReqGetUserById.cs" />
     <Compile Include="Models\Api\Account\RspAccountUserList.cs" />
