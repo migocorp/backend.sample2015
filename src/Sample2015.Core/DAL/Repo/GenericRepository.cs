@@ -48,7 +48,7 @@ namespace Sample2015.Core.DAL.Repo
             }
         }
 
-        public virtual IEnumerable<TEntity> Get(
+        public virtual IEnumerable<TEntity> Find(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = "")
