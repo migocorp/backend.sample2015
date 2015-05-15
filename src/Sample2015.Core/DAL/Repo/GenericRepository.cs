@@ -27,7 +27,7 @@ namespace Sample2015.Core.DAL.Repo
                 var dbContext = this.ambientDbContextLocator.Get<TDbContext>();
                 if (dbContext == null)
                 {
-                    throw new InvalidOperationException("No ambient DbContext of type CoreDbContext found.");
+                    throw new InvalidOperationException("No ambient DbContext of type " + typeof(TDbContext).Name + " found.");
                 }
                 
                 return dbContext;
@@ -41,7 +41,7 @@ namespace Sample2015.Core.DAL.Repo
                 var dbContext = this.DbContext;
                 if (dbContext == null)
                 {
-                    throw new InvalidOperationException("No ambient DbContext of type CoreDbContext found.");
+                    throw new InvalidOperationException("No ambient DbContext of type " + typeof(TDbContext).Name + " found.");
                 }
 
                 return dbContext.Set<TEntity>();
