@@ -7,6 +7,7 @@
     using System.Runtime.Remoting.Messaging;
     using System.Text;
     using System.Threading.Tasks;
+    using NLog;
 
     /// <summary>
     /// Purpose of a DbContextScopePurpose.
@@ -31,6 +32,8 @@
     /// </summary>
     public class DbContextScope : IDisposable
     {
+        protected readonly Logger Log;
+
         private static readonly string AmbientDbContextScopeKey = "AmbientDbcontext_" + Guid.NewGuid();
 
         private static readonly ConditionalWeakTable<InstanceIdentifier, DbContextScope> DbContextScopeInstances = new ConditionalWeakTable<InstanceIdentifier, DbContextScope>();
@@ -52,6 +55,8 @@
         /// <param name="purpose">Will this dbcontext scope be used for reading or writing?</param>
         public DbContextScope(DbContextScopePurpose purpose)
         {
+            this.Log = LogManager.GetLogger(this.GetType().Name);
+
             this.purpose = purpose;
 
             if (scopedDbContexts == null)
@@ -60,6 +65,9 @@
                 this.SetAmbientScope(this);
                 this.isRoot = true;
             }
+
+            this.Log.Info("AmbientDbContextScopeKey is " + AmbientDbContextScopeKey);
+            this.Log.Info("scopedDbContexts Runtime HashCode is " + scopedDbContexts.GetHashCode());
 
             if (purpose == DbContextScopePurpose.Writing && !scopedDbContexts.ForWriting)
             {

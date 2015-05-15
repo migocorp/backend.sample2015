@@ -8,7 +8,7 @@
     using Sample2015.Core.DAL.DbContextScope;
     using Sample2015.Core.Model.EF;
 
-    public class RepoAccountUser : GenericRepository<AccountUser>, IRepoAccountUser
+    public class RepoAccountUser : GenericRepository<CoreDbContext, AccountUser>, IRepoAccountUser
     {
         public RepoAccountUser(IAmbientDbContextLocator ambientDbContextLocator) : base(ambientDbContextLocator)
         {

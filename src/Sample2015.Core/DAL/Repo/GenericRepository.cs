@@ -11,7 +11,7 @@ namespace Sample2015.Core.DAL.Repo
     using System.Threading.Tasks;
     using Sample2015.Core.DAL.DbContextScope;
 
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+    public abstract class GenericRepository<TDbContext, TEntity> : IGenericRepository<TEntity> where TDbContext : DbContext where TEntity : class
     {
         private readonly IAmbientDbContextLocator ambientDbContextLocator;
 
@@ -20,11 +20,11 @@ namespace Sample2015.Core.DAL.Repo
             this.ambientDbContextLocator = ambientDbContextLocator;
         }
 
-        public virtual CoreDbContext DbContext
+        public virtual TDbContext DbContext
         {
             get
             {
-                var dbContext = this.ambientDbContextLocator.Get<CoreDbContext>();
+                var dbContext = this.ambientDbContextLocator.Get<TDbContext>();
                 if (dbContext == null)
                 {
                     throw new InvalidOperationException("No ambient DbContext of type CoreDbContext found.");
