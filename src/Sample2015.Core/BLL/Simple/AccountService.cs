@@ -11,6 +11,7 @@
         private readonly IRepoAccountUser repoAccountUser;
 
         public AccountService(IRepoAccountUser repoAccountUser)
+            : base()
         {
             this.repoAccountUser = repoAccountUser;
         }

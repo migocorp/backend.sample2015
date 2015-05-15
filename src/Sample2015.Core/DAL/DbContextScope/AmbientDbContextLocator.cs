@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using MongoDB.Driver;
 
     public class AmbientDbContextLocator : IAmbientDbContextLocator
     {
@@ -13,6 +14,12 @@
         {
             var ambientScope = DbContextScope.GetAmbientScope();
             return ambientScope == null ? null : ambientScope.DbContext.Get<TDbContext>();
+        }
+
+        public TMongoClient GetMongoDb<TMongoClient>(string connectionString) where TMongoClient : MongoClient
+        {
+            var ambientScope = DbContextScope.GetAmbientScope();
+            return ambientScope == null ? null : ambientScope.DbContext.GetMongoDb<TMongoClient>(connectionString);
         }
     }
 }

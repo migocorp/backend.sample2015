@@ -9,6 +9,7 @@ namespace Sample2015.Core.DAL.DbContextScope
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using MongoDB.Driver;
 
     /// <summary>
     /// Handle class for holding the real DbContext and some state for it.
@@ -16,6 +17,7 @@ namespace Sample2015.Core.DAL.DbContextScope
     public class DbContextCollection : IDisposable
     {
         private Dictionary<Type, DbContext> initializedDbContexts;
+        private Dictionary<string, MongoClient> initializedMongoClients;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DbContextCollection" /> class.
@@ -26,6 +28,7 @@ namespace Sample2015.Core.DAL.DbContextScope
             this.ForWriting = forWriting;
 
             this.initializedDbContexts = new Dictionary<Type, DbContext>();
+            this.initializedMongoClients = new Dictionary<string, MongoClient>();
         }
 
         /// <summary>
@@ -55,6 +58,17 @@ namespace Sample2015.Core.DAL.DbContextScope
             }
 
             return this.initializedDbContexts[requestedType] as TDbContext;
+        }
+
+        public TMongoClient GetMongoDb<TMongoClient>(string connectionString) where TMongoClient : MongoClient
+        {
+            if (!this.initializedMongoClients.ContainsKey(connectionString))
+            {
+                var dbContext = (TMongoClient)Activator.CreateInstance(typeof(TMongoClient), connectionString);
+                this.initializedMongoClients.Add(connectionString, dbContext);
+            }
+
+            return this.initializedMongoClients[connectionString] as TMongoClient;
         }
 
         public void SaveChanges()
@@ -89,6 +103,7 @@ namespace Sample2015.Core.DAL.DbContextScope
                 }
 
                 this.initializedDbContexts.Clear();
+                this.initializedMongoClients.Clear();
             }
         }
 
