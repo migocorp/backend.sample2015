@@ -103,7 +103,9 @@
     <Compile Include="Helper\Mongo\Sample2015ArrayOfObjectsToListSerializer.cs" />
     <Compile Include="Helper\Mongo\Sample2015DateTimeNullableSerializer.cs" />
     <Compile Include="Helper\Mongo\Sample2015DateTimeSerializer.cs" />
+    <Compile Include="Helper\Mongo\StringOrInt32Serializer.cs" />
     <Compile Include="Model\EF\AccountUser.cs" />
+    <Compile Include="Model\Mongo\DocTaMember.cs" />
     <Compile Include="Model\Mongo\Pandora\PandoRptKpiBasic.cs" />
     <Compile Include="Model\Mongo\RptStoreKpiBasic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
