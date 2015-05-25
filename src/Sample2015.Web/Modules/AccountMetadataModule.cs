@@ -1,6 +1,7 @@
 ﻿namespace Sample2015.Web.Modules
 {
     using Nancy.Metadata.Modules;
+    using Nancy.Routing;
     using Nancy.Swagger;
     using Sample2015.Web.Models.Api;
     using Sample2015.Web.Models.Api.Account;
@@ -10,14 +11,7 @@
     {
         public AccountMetadataModule()
         {
-            this.Describe["account-user"] = description => description.AsSwagger(with =>
-            {
-                with.ResourcePath("/api/account");
-                with.Summary("取得單一使用者資料");
-                with.Notes("取得單一使用者資料");
-                with.PathParam<int>("id", "User's ID", true, 1);
-                with.Model<RspAccountUser>();
-            });
+            this.Describe["account-user"] = this.AccountUser;
 
             this.Describe["account-user-list"] = description => description.AsSwagger(with =>
             {
@@ -58,6 +52,18 @@
                 with.Notes("刪除使用者");
                 with.Param<int>(ParameterType.Path, "Id", "User's Id", true);
                 with.Model<RspFrame>();
+            });
+        }
+
+        public SwaggerRouteData AccountUser(RouteDescription description)
+        {
+            return description.AsSwagger(with =>
+            {
+                with.ResourcePath("/api/account");
+                with.Summary("取得單一使用者資料");
+                with.Notes("取得單一使用者資料");
+                with.PathParam<int>("id", "User's ID", true, 1);
+                with.Model<RspAccountUser>();
             });
         }
     }
