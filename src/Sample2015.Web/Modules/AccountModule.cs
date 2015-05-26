@@ -28,9 +28,9 @@
 
             this.Get["account-user-list", PathApiAccountUserList] = this.GetUserList;
 
-            this.Post["account-user-create", PathApiAccountUserCreate] = this.CreateAccountUser;
+            this.Post["account-user-create", PathApiAccountUserCreate] = _ => this.RunHandler<ReqCreateAccountUser, Negotiator>(this.CreateAccountUser);
 
-            this.Put["account-user-update", PathApiAccountUser] = this.UpdateAccountUser;
+            this.Put["account-user-update", PathApiAccountUser] = _ => this.RunHandler<ReqUpdateAccountUser, Negotiator>(this.UpdateAccountUser);
 
             this.Delete["account-user-delete", PathApiAccountUser] = this.DeleteAccountUser;
         }
@@ -55,8 +55,6 @@
 
         private Negotiator GetUserList(dynamic parameters)
         {
-            ReqGetUserById req = this.Bind<ReqGetUserById>();
-
             var users = this.AccountService.FindAll();
 
             return Negotiate.WithOnlyJson(
