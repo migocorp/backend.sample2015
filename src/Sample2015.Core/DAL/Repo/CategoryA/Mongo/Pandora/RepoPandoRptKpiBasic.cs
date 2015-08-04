@@ -14,8 +14,8 @@
 
     public class RepoPandoRptKpiBasic : MongodbRepository<PandoRptKpiBasic>, IRepoPandoRptKpiBasic
     {
-        public RepoPandoRptKpiBasic(IAmbientDbContextLocator ambientDbContextLocator)
-            : base(ambientDbContextLocator, KitConfig.GetDbMongoUriPandora())
+        public RepoPandoRptKpiBasic()
+            : base(KitConfig.GetDbMongoUriPandora())
         {
         }
 

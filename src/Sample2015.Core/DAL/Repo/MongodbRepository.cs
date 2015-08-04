@@ -10,12 +10,10 @@
 
     public abstract class MongodbRepository<T>
     {
-        private readonly IAmbientDbContextLocator ambientDbContextLocator;
         private readonly string connectionString;
 
-        public MongodbRepository(IAmbientDbContextLocator ambientDbContextLocator, string connectionString)
+        public MongodbRepository(string connectionString)
         {
-            this.ambientDbContextLocator = ambientDbContextLocator;
             this.connectionString = connectionString;
         }
 

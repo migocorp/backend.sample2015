@@ -9,7 +9,6 @@ namespace Sample2015.Core.DAL.DbContextScope
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using MongoDB.Driver;
 
     /// <summary>
     /// Handle class for holding the real DbContext and some state for it.

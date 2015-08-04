@@ -13,8 +13,8 @@
 
     public class RepoRptStoreKpiBasic : MongodbRepository<RptStoreKpiBasic>, IRepoRptStoreKpiBasic
     {
-        public RepoRptStoreKpiBasic(IAmbientDbContextLocator ambientDbContextLocator)
-            : base(ambientDbContextLocator, KitConfig.GetDbMongoConnectString())
+        public RepoRptStoreKpiBasic()
+            : base(KitConfig.GetDbMongoConnectString())
         {
         }
 
