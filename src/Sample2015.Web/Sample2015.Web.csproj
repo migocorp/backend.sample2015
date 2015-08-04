@@ -117,20 +117,21 @@
     <Compile Include="Helper\Extensions\NancyModuleExtensions.cs" />
     <Compile Include="Helper\HttpException.cs" />
     <Compile Include="Helper\ModelValidation.cs" />
+    <Compile Include="ModelDataProviders\Api\Account\RspAccountUserModelDataProvider.cs" />
+    <Compile Include="Models\Api\Account\ReqGetUserByName.cs" />
     <Compile Include="Models\Api\Account\ReqDeleteAccountUser.cs" />
     <Compile Include="Models\Api\Account\ReqUpdateAccountUser.cs" />
     <Compile Include="Models\Api\Account\ReqCreateAccountUser.cs" />
     <Compile Include="Models\Api\Account\ReqGetUserById.cs" />
     <Compile Include="Models\Api\Account\RspAccountUserList.cs" />
     <Compile Include="Models\Api\Account\RspAccountUser.cs" />
+    <Compile Include="Models\Api\Account\RspAccountUserResultData.cs" />
     <Compile Include="Models\Api\RspFrame.cs" />
     <Compile Include="Modules\AccountModule.cs" />
     <Compile Include="Modules\AccountMetadataModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ModelDataProviders\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Sample2015.Core\Sample2015.Core.csproj">
       <Project>{8c85ee95-fa84-441c-91f4-efe468e2fb86}</Project>
@@ -152,7 +153,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>59588</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:59588/</IISUrl>
+          <IISUrl>http://localhost:50588/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

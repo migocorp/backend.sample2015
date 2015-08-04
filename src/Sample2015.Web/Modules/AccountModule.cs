@@ -18,6 +18,7 @@
         public static readonly string PathApiAccountUser = "/account/{id:int}";
         public static readonly string PathApiAccountUserList = "/account/list";
         public static readonly string PathApiAccountUserCreate = "/account/create";
+        public static readonly string PathApiAccount = "/account";
 
         public AccountModule(IAccountService accountService)
             : base()
@@ -33,6 +34,8 @@
             this.Put["account-user-update", PathApiAccountUser] = _ => this.RunHandler<ReqUpdateAccountUser, Negotiator>(this.UpdateAccountUser);
 
             this.Delete["account-user-delete", PathApiAccountUser] = this.DeleteAccountUser;
+
+            this.Get["account-user-name", PathApiAccount] = _ => this.RunHandler<ReqGetUserByName, Negotiator>(this.GetUserByName);
         }
 
         public IAccountService AccountService { get; set; }
@@ -61,10 +64,8 @@
                 new RspAccountUserList(HttpStatusCode.OK, users), HttpStatusCode.OK);
         }
 
-        private Negotiator CreateAccountUser(dynamic parameters)
+        private Negotiator CreateAccountUser(ReqCreateAccountUser req)
         {
-            ReqCreateAccountUser req = this.Bind<ReqCreateAccountUser>();
-
             var user = this.AccountService.GetUserByUsername(req.Username);
 
             if (user != null)
@@ -138,6 +139,22 @@
             this.AccountService.Delete(req.Id);
 
             return Negotiate.WithOnlyJson(new RspFrame(HttpStatusCode.OK));
+        }
+
+        private Negotiator GetUserByName(dynamic parameters)
+        {
+            ReqGetUserByName req = this.Bind<ReqGetUserByName>();
+
+            var user = this.AccountService.GetUserByUsername(req.username);
+
+            if (user == null)
+            {
+                return Negotiate.WithOnlyJson(
+                    new RspAccountUser(HttpStatusCode.NotFound), HttpStatusCode.NotFound);
+            }
+
+            return Negotiate.WithOnlyJson(
+                new RspAccountUser(HttpStatusCode.OK, user), HttpStatusCode.OK);
         }
     }
 }

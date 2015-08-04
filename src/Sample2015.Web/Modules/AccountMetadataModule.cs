@@ -53,6 +53,8 @@
                 with.Param<int>(ParameterType.Path, "Id", "User's Id", true);
                 with.Model<RspFrame>();
             });
+
+            this.Describe["account-user-name"] = this.AccountUserName;
         }
 
         public SwaggerRouteData AccountUser(RouteDescription description)
@@ -63,6 +65,18 @@
                 with.Summary("取得單一使用者資料");
                 with.Notes("取得單一使用者資料");
                 with.PathParam<int>("id", "User's ID", true, 1);
+                with.Model<RspAccountUser>();
+            });
+        }
+
+        public SwaggerRouteData AccountUserName(RouteDescription description)
+        {
+            return description.AsSwagger(with =>
+            {
+                with.ResourcePath("/api/account");
+                with.Summary("取得單一使用者資料");
+                with.Notes("取得單一使用者資料");
+                with.QueryParam<string>("username", "User's Username", true);
                 with.Model<RspAccountUser>();
             });
         }

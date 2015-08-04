@@ -44,28 +44,4 @@ namespace Sample2015.Web.Models.Api.Account
 
         public IList<RspAccountUserResultData> data { get; set; }
     }
-
-    public class RspAccountUserResultData
-    {
-        public RspAccountUserResultData(AccountUser user)
-        {
-            if (user == null)
-            {
-                return;
-            }
-
-            this.user_username = user.Username;
-            this.user_email = user.Email;
-            this.user_name = user.Name;
-        }
-
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string user_username { get; set; }
-
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string user_email { get; set; }
-
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string user_name { get; set; }
-    }
 }
