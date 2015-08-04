@@ -55,7 +55,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Sample2015.Test.Sample.ExampleReduction</StartupObject>
+    <StartupObject>Sample2015.Test.Sample.ExampleTest</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CsQuery">

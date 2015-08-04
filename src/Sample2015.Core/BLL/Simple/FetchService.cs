@@ -22,10 +22,7 @@
 
         public List<PandoRptKpiBasic> FetchReportStoreKpiFromBiPandora(DateTime date, RptDef.Period period)
         {
-            using (var scope = new DbContextScope(DbContextScopePurpose.Reading))
-            {
-                return this.repoPandoRptKpiBasic.FindRptsByDate(date, period).Result;
-            }
+            return this.repoPandoRptKpiBasic.FindRptsByDate(date, period).Result;
         }
     }
 }

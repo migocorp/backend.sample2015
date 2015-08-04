@@ -23,7 +23,7 @@
         {
             get
             {
-                var client = this.ambientDbContextLocator.GetMongoDb<MongoClient>(this.connectionString);
+                var client = new MongoClient(this.connectionString);
                 if (client == null)
                 {
                     throw new InvalidOperationException("No ambient connectionString: " + this.connectionString + " of MongoClient found.");

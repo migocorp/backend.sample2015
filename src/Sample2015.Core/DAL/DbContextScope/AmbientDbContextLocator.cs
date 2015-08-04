@@ -15,11 +15,5 @@
             var ambientScope = DbContextScope.GetAmbientScope();
             return ambientScope == null ? null : ambientScope.DbContext.Get<TDbContext>();
         }
-
-        public TMongoClient GetMongoDb<TMongoClient>(string connectionString) where TMongoClient : MongoClient
-        {
-            var ambientScope = DbContextScope.GetAmbientScope();
-            return ambientScope == null ? null : ambientScope.DbContext.GetMongoDb<TMongoClient>(connectionString);
-        }
     }
 }

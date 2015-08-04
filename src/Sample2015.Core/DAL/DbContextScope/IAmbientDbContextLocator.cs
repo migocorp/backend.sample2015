@@ -11,7 +11,5 @@
     public interface IAmbientDbContextLocator
     {
         TDbContext Get<TDbContext>() where TDbContext : DbContext;
-
-        TMongoClient GetMongoDb<TMongoClient>(string connectionString) where TMongoClient : MongoClient;
     }
 }

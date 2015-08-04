@@ -22,26 +22,17 @@
 
         public void InsertBulkReports(IEnumerable<RptStoreKpiBasic> newDocs)
         {
-            using (var scope = new DbContextScope(DbContextScopePurpose.Writing))
-            {
-                this.repoRptStoreKpiBasic.InsertBulkAsync(newDocs).Wait();
-            }
+            this.repoRptStoreKpiBasic.InsertBulkAsync(newDocs).Wait();
         }
 
         public List<RptStoreKpiBasic> FindReportsByDate(DateTime date, RptDef.Period period)
         {
-            using (var scope = new DbContextScope(DbContextScopePurpose.Reading))
-            {
-                return this.repoRptStoreKpiBasic.FindRptsByDate(date, period).Result;
-            }
+            return this.repoRptStoreKpiBasic.FindRptsByDate(date, period).Result;
         }
 
         public void DropCollection()
         {
-            using (var scope = new DbContextScope(DbContextScopePurpose.Writing))
-            {
-                this.repoRptStoreKpiBasic.DropCollection();
-            }
+            this.repoRptStoreKpiBasic.DropCollection();
         }
     }
 }
