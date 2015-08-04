@@ -23,8 +23,10 @@
             string exclude = "exclude25";
             ExampleReduction reduction = new ExampleReduction();
             var timeStart = DateTime.Now;
-            var count = reduction.RunCommand(db, source, target, exclude).Result;
-            /* var count = reduction.RunProgramming(db, source, target, exclude).Result; */
+            /* var count = reduction.RunCommand(db, source, target, exclude).Result;
+            var count = reduction.RunProgramming(db, source, target, exclude).Result;
+            var count = reduction.RunProgrammingDifference(db, source, target, exclude).Result; */
+            var count = reduction.RunProgramming2(db, source, target, exclude).Result;
             var timeEnd = DateTime.Now;
 
             Console.WriteLine("total time take: " + (timeEnd - timeStart));
@@ -74,13 +76,132 @@
             // 2. 找排除id
             var excludeCol = db.GetCollection<DocTaMember>(exclude);
             var ids = await excludeCol.DistinctAsync<string>("MemberId", new BsonDocument()).ConfigureAwait(continueOnCapturedContext: false);
-
+            
             // 3. delete ids
             var filter = new BsonDocument("MemberId", new BsonDocument("$in", BsonValue.Create(await ids.ToListAsync().ConfigureAwait(continueOnCapturedContext: false))));
             /* var expectedRequest = new DeleteRequest(filter) { CorrelationId = 0, Limit = 0 };
             var operationResult = new BulkWriteOperationResult.Unacknowledged(9, new[] { expectedRequest });
             await Task.FromResult(operationResult); */
             await targetCol.DeleteManyAsync(filter, CancellationToken.None).ConfigureAwait(continueOnCapturedContext: false);
+
+            var result = await targetCol.CountAsync(new BsonDocument()).ConfigureAwait(continueOnCapturedContext: false);
+
+            return result;
+        }
+
+        private async Task<long> RunProgramming2(IMongoDatabase db, string source, string target, string exclude)
+        {
+            var sourceCol = db.GetCollection<DocTaMember>(source);
+            var targetCol = db.GetCollection<DocTaMember>(target);
+
+            var excludeCol = db.GetCollection<DocTaMember>(exclude);
+            var ids = await excludeCol.DistinctAsync<string>("MemberId", new BsonDocument()).ConfigureAwait(continueOnCapturedContext: false);
+            var filter = new BsonDocument("MemberId", new BsonDocument("$nin", BsonValue.Create(await ids.ToListAsync().ConfigureAwait(continueOnCapturedContext: false))));
+
+            var docs = await sourceCol.FindAsync(filter).ConfigureAwait(continueOnCapturedContext: false);
+            await targetCol.InsertManyAsync(await docs.ToListAsync().ConfigureAwait(continueOnCapturedContext: false)).ConfigureAwait(continueOnCapturedContext: false);
+            var index = await targetCol.Indexes.CreateOneAsync(Builders<DocTaMember>.IndexKeys.Ascending(_ => _.MemberId)).ConfigureAwait(continueOnCapturedContext: false);
+
+            var result = await targetCol.CountAsync(new BsonDocument()).ConfigureAwait(continueOnCapturedContext: false);
+
+            return result;
+        }
+
+        private async Task<long> RunProgrammingDifference(IMongoDatabase db, string source, string target, string exclude)
+        {
+            var sourceCol = db.GetCollection<DocTaMember>(source);
+            var excludeCol = db.GetCollection<DocTaMember>(exclude);
+
+            var timeStart = DateTime.Now;
+            var sourceDocs = await sourceCol.FindAsync(new BsonDocument(), new FindOptions<DocTaMember>() { BatchSize = 50000, Sort = Builders<DocTaMember>.Sort.Ascending(_ => _.MemberId) }).ConfigureAwait(continueOnCapturedContext: false);
+            var timeEnd = DateTime.Now;
+            Console.WriteLine("sourceDocs time take: " + (timeEnd - timeStart));
+
+            timeStart = DateTime.Now;
+            var excludeDocs = await excludeCol.FindAsync(new BsonDocument(), new FindOptions<DocTaMember>() { BatchSize = 50000, Sort = Builders<DocTaMember>.Sort.Ascending(_ => _.MemberId) }).ConfigureAwait(continueOnCapturedContext: false);
+            timeEnd = DateTime.Now;
+            Console.WriteLine("excludeDocs time take: " + (timeEnd - timeStart));
+
+            //var targetCol = db.GetCollection<DocTaMember>(target);
+            //if (await sourceDocs.MoveNextAsync().ConfigureAwait(continueOnCapturedContext: false))
+            //{
+            //    var curs = sourceDocs.Current;
+            //    var except = new List<DocTaMember>();
+            //    await excludeDocs.ForEachAsync(async doc =>
+            //    {
+            //        if (string.Compare(doc.MemberId, curs.Max().MemberId, StringComparison.Ordinal) <= 0)
+            //        {
+            //            except.Add(doc);
+            //        }
+            //        else
+            //        {
+            //            await targetCol.InsertManyAsync(curs.Except(except)).ConfigureAwait(continueOnCapturedContext: false);
+            //            if (await sourceDocs.MoveNextAsync().ConfigureAwait(continueOnCapturedContext: false))
+            //            {
+            //                curs = sourceDocs.Current;
+            //            }
+            //            except.Clear();
+            //            except.Add(doc);
+            //        }
+            //    }).ConfigureAwait(continueOnCapturedContext: false);
+
+            //    await targetCol.InsertManyAsync(curs.Except(except)).ConfigureAwait(continueOnCapturedContext: false);
+            //    while (await sourceDocs.MoveNextAsync().ConfigureAwait(continueOnCapturedContext: false))
+            //    {
+            //        curs = sourceDocs.Current;
+            //        if (curs.Count() != 0)
+            //        {
+            //            await targetCol.InsertManyAsync(curs).ConfigureAwait(continueOnCapturedContext: false);
+            //        }
+            //    }
+            //}
+
+            //timeStart = DateTime.Now;
+            //IEnumerable<DocTaMember> enumSource = Enumerable.Empty<DocTaMember>();
+            //while (await sourceDocs.MoveNextAsync().ConfigureAwait(continueOnCapturedContext: false))
+            //{
+            //    IEnumerable<DocTaMember> curs = sourceDocs.Current;
+            //    enumSource = enumSource.Concat(curs);
+            //}
+            //timeEnd = DateTime.Now;
+            //Console.WriteLine("enumSource time take: " + (timeEnd - timeStart));
+
+            //timeStart = DateTime.Now;
+            //IEnumerable<DocTaMember> enumExclude = Enumerable.Empty<DocTaMember>();
+            //while (await excludeDocs.MoveNextAsync().ConfigureAwait(continueOnCapturedContext: false))
+            //{
+            //    IEnumerable<DocTaMember> curs = excludeDocs.Current;
+            //    enumExclude = enumExclude.Concat(curs);
+            //}
+            //timeEnd = DateTime.Now;
+            //Console.WriteLine("enumExclude time take: " + (timeEnd - timeStart));
+
+            //timeStart = DateTime.Now;
+            //await targetCol.InsertManyAsync(enumSource.Except(enumExclude)).ConfigureAwait(continueOnCapturedContext: false);
+            //timeEnd = DateTime.Now;
+            //Console.WriteLine("except time take: " + (timeEnd - timeStart));
+
+            timeStart = DateTime.Now;
+            var sourceLst = await sourceDocs.ToListAsync().ConfigureAwait(continueOnCapturedContext: false);
+            timeEnd = DateTime.Now;
+            Console.WriteLine("sourceLst time take: " + (timeEnd - timeStart));
+
+            timeStart = DateTime.Now;
+            var excludeLst = await excludeDocs.ToListAsync().ConfigureAwait(continueOnCapturedContext: false);
+            timeEnd = DateTime.Now;
+            Console.WriteLine("excludeLst time take: " + (timeEnd - timeStart));
+
+            timeStart = DateTime.Now;
+            var diffLst = sourceLst.Except(excludeLst);
+            timeEnd = DateTime.Now;
+            Console.WriteLine("diffLst time take: " + (timeEnd - timeStart));
+
+            var targetCol = db.GetCollection<DocTaMember>(target);
+            timeStart = DateTime.Now;
+            await targetCol.InsertManyAsync(diffLst).ConfigureAwait(continueOnCapturedContext: false);
+            timeEnd = DateTime.Now;
+            Console.WriteLine("targetCol time take: " + (timeEnd - timeStart));
+            var index = await targetCol.Indexes.CreateOneAsync(Builders<DocTaMember>.IndexKeys.Ascending(_ => _.MemberId)).ConfigureAwait(continueOnCapturedContext: false);
 
             var result = await targetCol.CountAsync(new BsonDocument()).ConfigureAwait(continueOnCapturedContext: false);
 

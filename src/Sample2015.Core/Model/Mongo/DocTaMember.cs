@@ -9,7 +9,7 @@
     using MongoDB.Bson.Serialization.Attributes;
     using Sample2015.Core.Helper.Mongo;
 
-    public class DocTaMember
+    public class DocTaMember : IComparable<DocTaMember>
     {
         public DocTaMember()
         {
@@ -116,6 +116,30 @@
             }
 
             return s;
+        }
+
+        public int CompareTo(DocTaMember obj)
+        {
+            string otherObj = obj.MemberId;
+            string thisObj = this.MemberId;
+
+            return string.Compare(thisObj, otherObj, StringComparison.Ordinal);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.MemberId.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            DocTaMember other = obj as DocTaMember;
+            if (other == null)
+            {
+                return false;
+            }
+                
+            return this.MemberId == other.MemberId;
         }
 
         public override string ToString()

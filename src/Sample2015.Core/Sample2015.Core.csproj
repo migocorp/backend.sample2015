@@ -80,6 +80,7 @@
     <Compile Include="BLL\Simple\FetchService.cs" />
     <Compile Include="BLL\Simple\RptStoreKpiBasicService.cs" />
     <Compile Include="DAL\CoreDbContext.cs" />
+    <Compile Include="DAL\CoreDbContextMigrationConfiguration.cs" />
     <Compile Include="DAL\DataInitializer.cs" />
     <Compile Include="DAL\DbContextScope\AmbientDbContextLocator.cs" />
     <Compile Include="DAL\DbContextScope\DbContextCollection.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Helper\Mongo\Sample2015DateTimeSerializer.cs" />
     <Compile Include="Helper\Mongo\StringOrInt32Serializer.cs" />
     <Compile Include="Model\EF\AccountUser.cs" />
+    <Compile Include="Model\EF\FakeTa.cs" />
     <Compile Include="Model\Mongo\DocTaMember.cs" />
     <Compile Include="Model\Mongo\Pandora\PandoRptKpiBasic.cs" />
     <Compile Include="Model\Mongo\RptStoreKpiBasic.cs" />
